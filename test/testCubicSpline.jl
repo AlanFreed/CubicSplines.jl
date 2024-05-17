@@ -1,6 +1,6 @@
 #=
 Created on Wed 15 May 2024
-Updated on Thr 16 May 2024
+Updated on Fri 17 May 2024
 
 This test program verifies the cubic spline implemented in CubicSplines.jl by
 creating a spline for a sine wave, whose first derivative should produce a
@@ -26,7 +26,7 @@ import
 export
     run
 
-function run(knots::Integer)
+function run(knots::Int64)
 
     # The vector of independent values.
     xₖ = zeros(Float64, knots)
@@ -70,9 +70,9 @@ function run(knots::Integer)
 
     # Compute spline error at the nodes, i.e., mid points between knots.
     for n = 1:nodes
-        zₙ[n]  = Y(xₙ[n])
-        z′ₙ[n] = Y′(xₙ[n])
-        z″ₙ[n] = Y″(xₙ[n])
+        zₙ[n]  = Y(spline,  xₙ[n])
+        z′ₙ[n] = Y′(spline, xₙ[n])
+        z″ₙ[n] = Y″(spline, xₙ[n])
         eₙ[n]  = abs(zₙ[n]  - yₙ[n])
         e′ₙ[n] = abs(z′ₙ[n] - y′ₙ[n])
         e″ₙ[n] = abs(z″ₙ[n] - y″ₙ[n])
@@ -134,9 +134,10 @@ function run(knots::Integer)
         color = :red,
         label = "y″=-sin(x)")
     axislegend("Locations",
-        position = :lc)
+        position = :ct)
 
-    figPath = string(dirPath, "testCubicSpline.png")
+    figName = string("testCubicSpline", knots, "knots.png")
+    figPath = string(dirPath, figName)
     save(figPath, fig)
 end # run
 
