@@ -1,10 +1,10 @@
 #=
 Created on Wed 15 May 2024
-Updated on Thr 16 May 2024
+Updated on Fri 17 May 2024
 Translated from Python (code dated 09/24/2019).
 =#
 
-#=
+"""
 This module was taken from the author's course in numerical methods at TAMU.
 
 Given x and y data, where x represents an ordered ascending array of independent variables and y represents an array of dependent variables of like dimension, this module finds the coefficients (a, b, c, d) for a cubic interpolation that spline these data. Exported are interpolations for
@@ -18,15 +18,17 @@ Given x and y data, where x represents an ordered ascending array of independent
 The four extra equations that associate with a cubic spline are chosen to ensure that the spline goes through its two end points with a slope that is appropriate for the two nodes at each end of the spline. This is often called a clamped spline.
 
 struct CubicSpline
-    a::Vector{Float64}          # vector of length n for constant coefficients
-    b::Vector{Float64}          # vector of length n for linear coefficients
-    c::Vector{Float64}          # vector of length n for quadratic coefficients
-    d::Vector{Float64}          # vector of length n for cubic coefficients
-    x::Vector{Float64}          # vector of length n+1 of independent variables
+    a::Vector{Float64}  # vector of length n for the constant coefficients
+    b::Vector{Float64}  # vector of length n for the linear coefficients
+    c::Vector{Float64}  # vector of length n for the quadratic coefficients
+    d::Vector{Float64}  # vector of length n for the cubic coefficients
+    x::Vector{Float64}  # vector of length n+1 of independent variables
 
-constructor
+constructors
 
-    spline = CubicSpline(x, y)
+    spline = CubicSpline(xData, yData)
+or
+    spline = CubicSpline(a, b, c, d, x)
 
 methods
 
@@ -50,15 +52,15 @@ methods
             atX     independent variable where dependent variable is sought
         returns
             y″      interpolated valued for the derivative d²y(x)/dx².
-=#
-
+"""
 module CubicSplines
 
 using
     BandedMatrices
 
 import
-    Printf: @sprintf
+    Printf:
+        @sprintf
 
 export
     CubicSpline,
@@ -73,9 +75,9 @@ struct CubicSpline
     d::Vector{Float64}  # Vector of cubic coefficients.
     x::Vector{Float64}  # Vector containing the knots of interpolation.
 
-    # constructor
+    # constructors
 
-    CubicSpline(x::Vector{Float64}, y::Vector{Float64})
+    function CubicSpline(x::Vector{Float64}, y::Vector{Float64})
         # Verify the input.
         if length(x) == length(y)
             n = length(x) - 1
@@ -174,6 +176,11 @@ struct CubicSpline
             c[i] = lhs[j-1]
             d[i] = lhs[j]
         end
+
+        new(a, b, c, d, x)
+    end
+
+    function CubicSpline(a::Vector{Float64}, b::Vector{Float64}, c::Vector{Float64}, d::Vector{Float64}, x::Vector{Float64})
 
         new(a, b, c, d, x)
     end
