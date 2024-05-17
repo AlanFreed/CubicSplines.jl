@@ -36,13 +36,18 @@ end
 ```
 where the vector of independent values `x` is needed internally to retrieve the appropriate polynomial for interpolating a $y(x)$ value that lies between two neighboring knots, say $x_n$ and $x_{n+1}$ with $x_n \le x < x_{n+1}$.
 
-## Constructor
+## Constructors
 
-To create a new cubic spline, one can call
+To create a new cubic spline, one will typically call
 ```
 CubicSpline(x::Vector{Float64}, y::Vector{Float64})
 ```
 where vector `x` contains an ascending array of independent values, while vector `y` contains an array of dependent values that is to be interpolated. These two vectors must have the same dimension, which must be 3 or greater in length.
+
+Or one can use
+```
+function CubicSpline(a::Vector{Float64}, b::Vector{Float64}, c::Vector{Float64}, d::Vector{Float64}, x::Vector{Float64})
+```
 
 ## Methods
 
