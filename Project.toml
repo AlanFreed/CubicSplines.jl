@@ -1,0 +1,8 @@
+name = "CubicSplines"
+uuid = "2555dc27-9595-4c2f-aa4a-fc7d9c409629"
+authors = ["Alan Freed <alan.d.freed@proton.me>"]
+version = "0.1.0"
+
+[deps]
+BandedMatrices = "aae01518-5342-5314-be14-df237901396f"
+Printf = "de0858da-6303-5e67-8744-51eddeeeb8d7"
