@@ -26,7 +26,7 @@ import
 export
     run
 
-function run(knots::Int64)
+function run(knots::Int)
 
     # The vector of independent values.
     xₖ = zeros(Float64, knots)
