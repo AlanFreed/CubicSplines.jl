@@ -22,7 +22,7 @@ $$ y″(x) = 2 c + 6 d x $$
 
 where $y′ = \mathrm{d}y/\mathrm{d}x$ and $y″ = \mathrm{d}^2 y/\mathrm{d}x^2$.
 
-The four extra equations that associate with a cubic spline were chosen to ensure that the spline goes through its two end points with a slope that is appropriate for the three nodes at each end of the spline. This is often called a clamped spline.
+The four extra equations that associate with a cubic spline were chosen to ensure that the spline goes through its two, end, nodal points with slopes that are appropriate for the three nodes at each end of the spline. This is often called a *clamped spline*.
 
 The type created for working with cubic splines has a data structure of
 ```
@@ -44,7 +44,7 @@ CubicSpline(x::Vector{Float64}, y::Vector{Float64})
 ```
 where vector `x` contains an ascending array of independent values, while vector `y` contains an array of dependent values that is to be interpolated. These two vectors must have the same dimension, which must be 3 or greater in length.
 
-Or one can use
+Or one can use the general constructor
 ```
 function CubicSpline(a::Vector{Float64}, b::Vector{Float64}, c::Vector{Float64}, d::Vector{Float64}, x::Vector{Float64})
 ```
@@ -53,32 +53,40 @@ function CubicSpline(a::Vector{Float64}, b::Vector{Float64}, c::Vector{Float64},
 
 To interpolate for a value of the data, call
 ```
-function Y(spline::CubicSpline, atX::Float64)::Float64
+function Y(spline::CubicSpline, x::Float64)::Float64
 ```
-e.g., `y = Y(spline, atX),` where `y` is an interpolated value derived from a `spline` whose interpolant is located `atX,` which must lie somewhere within the span of `spline.x.`
+e.g., `y = Y(spline, x),` where `y` is an interpolated value derived from a `spline` whose interpolant is located `x,` which must lie somewhere within the span of `spline.x.`
 
 To interpolate for a first derivative of the data, call
 ```
-function Y′(spline::CubicSpline, atX::Float64)::Float64
+function Y′(spline::CubicSpline, x::Float64)::Float64
 ```
-e.g., `y′ = Y′(spline, atX),` where `y′` is an interpolated value for the derivative of `y` derived from a `spline` whose interpolant is located `atX,` which must lie somewhere within the span of `spline.x.`
+e.g., `y′ = Y′(spline, x),` where `y′` is an interpolated value for the derivative of `y` derived from a `spline` whose interpolant is located `x,` which must lie somewhere within the span of `spline.x.`
 
 To interpolate for a second derivative of the data, call
 ```
-function Y″(spline::CubicSpline, atX::Float64)::Float64
+function Y″(spline::CubicSpline, x::Float64)::Float64
 ```
-e.g., `y″ = Y″(spline, atX),` where `y″` is an interpolated value for the second derivative of `y` derived from a `spline` whose interpolant is located `atX,` which must lie somewhere within the span of `spline.x.`
+e.g., `y″ = Y″(spline, x),` where `y″` is an interpolated value for the second derivative of `y` derived from a `spline` whose interpolant is located `x,` which must lie somewhere within the span of `spline.x.`
 
 ## Test
 
 In the subdirectory `test` is a file `testCubicSpline.jl` that when compiled will export a function
 ```
-function run(knots::Integer)
+function run(knots::Int)
 ```
 where `knots` is to be a value greater than 2. These knots will span half of a sine wave that is to be interpolated. The output will be a figure saved to a directory `figures` under your current working directory. Interpolations are at the midpoints of the knots, with errors of approximation being computed there.
 
 # Version History
 
-# Version 0.1.0
+## Version 0.1.2
 
-The original version, dated 17 May 2024. It is a port from the author's python code from a class that he taught in numerical methods to mechanical engineers when he was a professor at Texas A&M University. This port was made because of issues that the author had with the BSplineKit.jl package that kept reoccuring with new releases of the compliler. It turned out to be more efficient for me to just code what I needed in my own applications.
+Improved the documentation.
+
+## Version 0.1.1
+
+Used second order (instead of first order) forward and backward difference formula to estimate derivatives at the end points of a spline.
+
+## Version 0.1.0
+
+The original version, dated 17 May 2024. It is a port from the author's python code from a class that he taught in numerical methods to mechanical engineers when he was a professor at Texas A&M University (TAMU). This port was made because of issues that the author had with the BSplineKit.jl package that kept reoccuring with new releases of the compliler. It turned out to be more efficient for me to just code what I needed in my own applications.

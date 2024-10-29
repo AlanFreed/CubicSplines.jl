@@ -1,8 +1,12 @@
 name = "CubicSplines"
 uuid = "2555dc27-9595-4c2f-aa4a-fc7d9c409629"
 authors = ["Alan Freed <alan.d.freed@proton.me>"]
-version = "0.1.1"
+version = "0.1.2"
 
 [deps]
 BandedMatrices = "aae01518-5342-5314-be14-df237901396f"
+CairoMakie = "13f3f980-e62b-5c42-98c6-ff1f3baf88f0"
 Printf = "de0858da-6303-5e67-8744-51eddeeeb8d7"
+
+[compat]
+CairoMakie = "0.12.15"
