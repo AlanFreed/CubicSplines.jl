@@ -1,6 +1,6 @@
 #=
 Created on Wed 15 May 2024
-Updated on Fri 17 May 2024
+Updated on Wed 14 Jan 2026   # switched from CairoMakie to Plots
 
 This test program verifies the cubic spline implemented in CubicSplines.jl by
 creating a spline for a sine wave, whose first derivative should produce a
@@ -12,7 +12,7 @@ cosine wave, and whose second derivative should produce a negative sine wave.
 module testCubicSpline
 
 using
-    CairoMakie
+    Plots
 
 import
     CubicSplines:
@@ -77,68 +77,33 @@ function run(knots::Int)
         e′ₙ[n] = abs(z′ₙ[n] - y′ₙ[n])
         e″ₙ[n] = abs(z″ₙ[n] - y″ₙ[n])
     end
+    
+    # set the graphics backend to GR
+    ENV["QT_QPA_PLATFORM"] = "wayland"
+    gr()
+    
+    p1 = plot(xₙ, [zₙ z′ₙ z″ₙ], linewidth=3, legend=:inside, legendcolumns=3)
+    title!(string("y = sin(x); Values at Mid Points: ", knots, " knots"))
+    xlabel!("x")
+    ylabel!(string("y, y', y", '"'))
+    
+    p2 = plot(xₙ, [eₙ e′ₙ e″ₙ], linewidth=3)
+    plot!(yscale=:log10, minorgrid=true, legend=:top, legendcolumns=3)
+    ylims!(1e-10, 1)
+    title!(string("Errors at Mid Points: ", knots, " knots"))
+    xlabel!("x")
+    ylabel!(string("e, e', e", '"'))
 
     dirPath = string(pwd(), "/figures/")
     if !isdir(dirPath)
         mkdir(dirPath)
     end
-
-    CairoMakie.activate!(type = "png")
-    fig = Figure(; size = (1000, 500)) # (500ϕ, 500), ϕ is golden ratio
-    ax1 = Axis(fig[1, 1];
-        title  = string("Values at Mid Points: ", knots, " knots"),
-        xlabel = "x",
-        ylabel = "y",
-        titlesize = 24,
-        xlabelsize = 20,
-        ylabelsize = 20)
-    lines!(ax1, xₙ, zₙ;
-        linewidth = 3,
-        linestyle = :solid,
-        color = :black,
-        label = "y=sin(x)")
-    lines!(ax1, xₙ, z′ₙ;
-        linewidth = 3,
-        linestyle = :solid,
-        color = :blue,
-        label = "y′=cos(x)")
-    lines!(ax1, xₙ, z″ₙ;
-        linewidth = 3,
-        linestyle = :solid,
-        color = :red,
-        label = "y″=-sin(x)")
-    axislegend("Locations",
-        position = :lb)
-
-    ax2 = Axis(fig[1,2];
-        title  = string("Errors at Mid Points: ", knots, " knots"),
-        xlabel = "x",
-        ylabel = "error",
-        titlesize = 24,
-        xlabelsize = 20,
-        ylabelsize = 20,
-        yscale = log10)
-    lines!(ax2, xₙ, eₙ;
-        linewidth = 3,
-        linestyle = :solid,
-        color = :black,
-        label = "y=sin(x)")
-    lines!(ax2, xₙ, e′ₙ;
-        linewidth = 3,
-        linestyle = :solid,
-        color = :blue,
-        label = "y′=cos(x)")
-    lines!(ax2, xₙ, e″ₙ;
-        linewidth = 3,
-        linestyle = :solid,
-        color = :red,
-        label = "y″=-sin(x)")
-    axislegend("Locations",
-        position = :ct)
-
     figName = string("testCubicSpline", knots, "knots.png")
     figPath = string(dirPath, figName)
-    save(figPath, fig)
+    
+    plot(p1, p2, layout=(2,1))
+    savefig(figPath)
+
 end # run
 
 end # testCubicSpline
