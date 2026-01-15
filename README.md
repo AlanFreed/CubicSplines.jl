@@ -79,6 +79,10 @@ where `knots` is to be a value greater than 2. These knots will span half of a s
 
 # Version History
 
+## Version 0.1.3
+
+Switched from CairoMakie to Plots for creating graphs.
+
 ## Version 0.1.2
 
 Improved the documentation.
